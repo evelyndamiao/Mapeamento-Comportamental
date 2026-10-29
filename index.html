@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapeamento Comportamental 300</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E30613; --red-soft:#FDE7E8; --ink:#1F2328; --muted:#5E6670; --line:#E4E6EA;
+  --bg:#F6F7F9; --surface:#FFFFFF; --chip:#FFFFFF; --chip-text:#1F2328;
+  --d:#E30613; --i:#F2A900; --s:#2E9E6A; --c:#2F6FD6;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --red:#FF3B47; --red-soft:#3A1416; --ink:#ECEEF1; --muted:#A3AAB3; --line:#2E333A;
+    --bg:#15181C; --surface:#1D2126; --chip:#23282E; --chip-text:#ECEEF1; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --red:#FF3B47; --red-soft:#3A1416; --ink:#ECEEF1; --muted:#A3AAB3; --line:#2E333A;
+  --bg:#15181C; --surface:#1D2126; --chip:#23282E; --chip-text:#ECEEF1; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 "Source Sans 3",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 60px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.logo{background:#E30613;color:#fff;font:900 26px/1 Montserrat,sans-serif;padding:14px 12px;letter-spacing:-1px}
+.brand{font:600 13px/1.25 Montserrat,sans-serif;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px}
+h1{font:800 clamp(28px,5vw,40px)/1.1 Montserrat,sans-serif;margin:0 0 14px;letter-spacing:-.5px}
+h2{font:700 22px/1.2 Montserrat,sans-serif;margin:0 0 10px}
+h3{font:700 16px/1.3 Montserrat,sans-serif;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:62ch}
+.muted{color:var(--muted)}
+.btn{font:700 15px Montserrat,sans-serif;border:0;border-radius:10px;padding:13px 22px;cursor:pointer;background:var(--red);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.progress>i{display:block;height:100%;background:var(--red);transition:width .25s}
+.qnum{font:700 15px Montserrat,sans-serif;color:var(--muted);margin-bottom:18px}
+.qnum b{color:var(--red)}
+.label{font-weight:600;margin:18px 0 10px}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:620px){.opts{grid-template-columns:repeat(2,1fr)}}
+.opt{font:600 14px Montserrat,sans-serif;background:var(--chip);color:var(--chip-text);border:1.5px solid var(--line);border-radius:10px;padding:14px 8px;cursor:pointer;min-height:54px}
+.opt.sel-mais{border-color:var(--red);background:var(--red-soft)}
+.opt.sel-menos{border-color:var(--muted);background:var(--line)}
+.opt:disabled{opacity:.35;cursor:not-allowed}
+.nav{display:flex;justify-content:space-between;margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+.err{color:var(--red);font-weight:600;min-height:1.5em;margin-top:12px}
+/* resultado */
+.headline{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;margin-bottom:26px}
+.code{font:900 clamp(56px,12vw,96px)/.9 Montserrat,sans-serif;letter-spacing:-3px;display:flex}
+.code span{display:inline-block}
+.chart{display:grid;grid-template-columns:28px repeat(4,1fr);gap:12px;align-items:end;height:250px;margin:10px 0 6px}
+.axis{display:flex;flex-direction:column-reverse;justify-content:space-between;height:100%;font:600 12px Montserrat,sans-serif;color:var(--muted);text-align:right}
+.col{height:100%;display:flex;flex-direction:column;justify-content:flex-end;position:relative;background:repeating-linear-gradient(to top,transparent 0,transparent calc(100%/7 - 1px),var(--line) calc(100%/7 - 1px),var(--line) calc(100%/7))}
+.col .mid{position:absolute;left:0;right:0;bottom:calc(400%/7);border-top:2px dashed var(--muted);opacity:.6}
+.bar{border-radius:6px 6px 0 0;transition:height .6s cubic-bezier(.2,.8,.2,1);display:flex;justify-content:center;align-items:flex-start;padding-top:6px;color:#fff;font:800 14px Montserrat,sans-serif}
+.legend{display:grid;grid-template-columns:28px repeat(4,1fr);gap:12px;text-align:center;font:700 13px Montserrat,sans-serif}
+.legend small{display:block;font:400 13px "Source Sans 3",sans-serif;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:center}
+th:first-child,td:first-child{text-align:left}
+th{font:700 13px Montserrat,sans-serif;color:var(--muted)}
+.scroll{overflow-x:auto}
+ul{margin:0;padding-left:20px}
+li{margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:620px){.grid2{grid-template-columns:1fr}.headline{grid-template-columns:1fr}}
+.note{font-size:14px;color:var(--muted);margin-top:22px;border-left:3px solid var(--line);padding-left:12px}
+@media (prefers-reduced-motion:reduce){.bar,.progress>i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">300</div>
+    <div class="brand">Ecossistema<br>300 franchising</div>
+  </header>
+  <main id="app" class="card" aria-live="polite"></main>
+</div>
+
+<script>
+// Banco de perguntas: cada opção tem a palavra e a dimensão (a ordem já vem embaralhada)
+const Q = [
+ [["Constante","S"],["Assertivo(a)","D"],["Criterioso(a)","C"],["Comunicativo(a)","I"]],
+ [["Organizado(a)","C"],["Carismático(a)","I"],["Objetivo(a)","D"],["Acolhedor(a)","S"]],
+ [["Espontâneo(a)","I"],["Tolerante","S"],["Meticuloso(a)","C"],["Resoluto(a)","D"]],
+ [["Rigoroso(a)","C"],["Ambicioso(a)","D"],["Compreensivo(a)","S"],["Inspirador(a)","I"]],
+ [["Ponderado(a)","S"],["Envolvente","I"],["Planejado(a)","C"],["Desafiador(a)","D"]],
+ [["Arrojado(a)","D"],["Racional","C"],["Simpático(a)","I"],["Conciliador(a)","S"]],
+ [["Técnico(a)","C"],["Estável","S"],["Proativo(a)","D"],["Expansivo(a)","I"]],
+ [["Popular","I"],["Minucioso(a)","C"],["Confiável","S"],["Prático(a)","D"]],
+ [["Atencioso(a)","S"],["Corajoso(a)","D"],["Contagiante","I"],["Investigativo(a)","C"]],
+ [["Formal","C"],["Articulado(a)","I"],["Destemido(a)","D"],["Sensato(a)","S"]],
+ [["Tranquilo(a)","S"],["Prudente","C"],["Sorridente","I"],["Ágil","D"]],
+ [["Criativo(a)","I"],["Pioneiro(a)","D"],["Correto(a)","C"],["Pacífico(a)","S"]],
+ [["Pontual","C"],["Bom(boa) ouvinte","S"],["Motivador(a)","I"],["Focado(a) em metas","D"]],
+ [["Dedicado(a)","S"],["Incisivo(a)","D"],["Estruturado(a)","C"],["Eloquente","I"]],
+ [["Reflexivo(a)","C"],["Desinibido(a)","I"],["Comprometido(a)","S"],["Combativo(a)","D"]],
+ [["Engraçado(a)","I"],["Cordial","S"],["Empreendedor(a)","D"],["Observador(a)","C"]],
+ [["Discreto(a)","C"],["Autônomo(a)","D"],["Vibrante","I"],["Harmonioso(a)","S"]],
+ [["Apoiador(a)","S"],["Coerente","C"],["Bom(boa) de conversa","I"],["Enfático(a)","D"]],
+ [["Influente","I"],["Pragmático(a)","D"],["Cético(a)","C"],["Empático(a)","S"]],
+ [["Precavido(a)","C"],["Despretensioso(a)","S"],["Tenaz","D"],["Encorajador(a)","I"]],
+ [["Acessível","S"],["Imaginativo(a)","I"],["Comedido(a)","C"],["Realizador(a)","D"]],
+ [["Impetuoso(a)","D"],["Ameno(a)","S"],["Agitado(a)","I"],["Concentrado(a)","C"]],
+ [["Leve","I"],["Profundo(a)","C"],["Questionador(a)","D"],["Companheiro(a)","S"]],
+ [["Segue procedimentos","C"],["Rápido(a) nas decisões","D"],["Sossegado(a)","S"],["Amigável","I"]],
+ [["Empolgado(a)","I"],["Fiel aos combinados","S"],["Atento(a) à qualidade","C"],["Protagonista","D"]],
+ [["Fundamentado(a)","C"],["Radiante","I"],["Ativo(a)","D"],["Brando(a)","S"]],
+ [["Amável","S"],["Taxativo(a)","D"],["Estudioso(a)","C"],["Festivo(a)","I"]],
+ [["Cheio(a) de ideias","I"],["Regrado(a)","C"],["Gosta de rotina","S"],["Convicto(a)","D"]]
+];
+
+const DIM = {
+ D:{nome:"Dominante",perfil:"Realizador",cor:"var(--d)",
+    texto:"Foca em resultado, decide rápido e gosta de desafios. Assume o comando quando a situação pede e se incomoda com lentidão.",
+    motiva:["Metas claras e desafiadoras","Autonomia para decidir","Ver resultado rápido"],
+    desenvolver:["Ouvir antes de decidir","Dosar a franqueza com o time","Ter paciência com processos"]},
+ I:{nome:"Influente",perfil:"Comunicador",cor:"var(--i)",
+    texto:"Conecta pessoas, se comunica com facilidade e contagia o ambiente. Rende mais em equipe e em ambientes com energia.",
+    motiva:["Reconhecimento público","Trabalho com pessoas","Liberdade para criar"],
+    desenvolver:["Concluir o que começa","Dar feedbacks difíceis","Olhar os riscos com realismo"]},
+ S:{nome:"Estável",perfil:"Apoiador",cor:"var(--s)",
+    texto:"Traz constância, escuta e cuida das relações. É a pessoa em quem o time confia para manter as coisas funcionando.",
+    motiva:["Ambiente previsível","Relações de confiança","Saber como pode ajudar"],
+    desenvolver:["Se posicionar com firmeza","Lidar bem com mudanças","Dizer não quando preciso"]},
+ C:{nome:"Cauteloso",perfil:"Analista",cor:"var(--c)",
+    texto:"Busca precisão, segue critérios e analisa antes de agir. Garante qualidade e evita erros que outros deixariam passar.",
+    motiva:["Regras e expectativas claras","Tempo para fazer bem feito","Dados para decidir"],
+    desenvolver:["Decidir sem ter 100% das informações","Flexibilizar padrões","Compartilhar o raciocínio com o time"]}
+};
+const ORDEM=["D","I","S","C"];
+
+// Faixas: diferença -> segmento 1 a 7
+function segmento(d){
+  if(d>=9)return 7; if(d>=5)return 6; if(d>=2)return 5;
+  if(d>=-1)return 4; if(d>=-4)return 3; if(d>=-8)return 2; return 1;
+}
+
+let atual=-1; // -1 = tela inicial
+let resp=Q.map(()=>({mais:null,menos:null}));
+const app=document.getElementById("app");
+
+function render(){
+  if(atual<0) return telaInicio();
+  if(atual>=Q.length) return telaResultado();
+  telaPergunta();
+}
+
+function telaInicio(){
+  app.innerHTML=`
+    <h1>Mapeamento comportamental</h1>
+    <p>São 28 perguntas rápidas. Em cada uma, escolha a palavra com que você <b>mais</b> se identifica e a palavra com que <b>menos</b> se identifica.</p>
+    <p class="muted">Não existe resposta certa. Responda pensando em como você age no trabalho, não em como gostaria de agir. Leva cerca de 10 minutos.</p>
+    <div class="row">
+      <button class="btn" id="go">Começar</button>
+      <button class="btn ghost" id="demo">Ver exemplo com respostas aleatórias</button>
+    </div>`;
+  document.getElementById("go").onclick=()=>{atual=0;render()};
+  document.getElementById("demo").onclick=()=>{
+    resp=Q.map(q=>{const a=Math.floor(Math.random()*4);let b;do{b=Math.floor(Math.random()*4)}while(b===a);return{mais:a,menos:b}});
+    atual=Q.length;render();
+  };
+}
+
+function telaPergunta(){
+  const q=Q[atual], r=resp[atual];
+  const btns=(tipo)=>q.map(([p],i)=>{
+    const sel=r[tipo]===i, bloq=(tipo==="mais"?r.menos:r.mais)===i;
+    return `<button class="opt ${sel?"sel-"+tipo:""}" data-t="${tipo}" data-i="${i}" ${bloq?"disabled":""} aria-pressed="${sel}">${p}</button>`;
+  }).join("");
+  app.innerHTML=`
+    <div class="progress"><i style="width:${(atual/Q.length)*100}%"></i></div>
+    <div class="qnum">Pergunta <b>${atual+1}</b> de ${Q.length}</div>
+    <div class="label">Com qual palavra você <b>mais</b> se identifica?</div>
+    <div class="opts">${btns("mais")}</div>
+    <div class="label">Com qual palavra você <b>menos</b> se identifica?</div>
+    <div class="opts">${btns("menos")}</div>
+    <div class="err" id="err"></div>
+    <div class="nav">
+      <button class="btn ghost" id="prev">Anterior</button>
+      <button class="btn" id="next">${atual===Q.length-1?"Ver meu resultado":"Próxima"}</button>
+    </div>`;
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{r[b.dataset.t]=+b.dataset.i;render()});
+  document.getElementById("prev").onclick=()=>{atual--;render()};
+  document.getElementById("next").onclick=()=>{
+    if(r.mais===null||r.menos===null){document.getElementById("err").textContent="Escolha uma palavra em cada linha para continuar.";return}
+    atual++;render();window.scrollTo(0,0);
+  };
+}
+
+function calcular(){
+  const m={D:0,I:0,S:0,C:0}, l={D:0,I:0,S:0,C:0};
+  resp.forEach((r,i)=>{m[Q[i][r.mais][1]]++; l[Q[i][r.menos][1]]++;});
+  const res={};
+  ORDEM.forEach(k=>{const d=m[k]-l[k];res[k]={mais:m[k],menos:l[k],dif:d,seg:segmento(d)}});
+  // dimensão principal: maior segmento, depois maior diferença, depois ordem D I S C
+  const rank=[...ORDEM].sort((a,b)=>res[b].seg-res[a].seg||res[b].dif-res[a].dif||ORDEM.indexOf(a)-ORDEM.indexOf(b));
+  const altas=rank.filter(k=>res[k].seg>=5).slice(0,2);
+  let perfil, sub;
+  if(altas.length===0){perfil="Equilibrado";sub="Nenhuma dimensão acima da média"}
+  else if(altas.length===1){perfil=DIM[altas[0]].perfil;sub=`Perfil ${altas[0]}`}
+  else{perfil=`${DIM[altas[0]].perfil}-${DIM[altas[1]].perfil}`;sub=`Perfil ${altas[0]}-${altas[1]}`}
+  return{res,principal:rank[0],perfil,sub};
+}
+
+function telaResultado(){
+  const {res,principal,perfil,sub}=calcular();
+  const P=DIM[principal];
+  app.innerHTML=`
+    <div class="headline">
+      <div>
+        <p class="muted" style="margin-bottom:6px">Seu resultado</p>
+        <h1 style="margin:0">${perfil}</h1>
+        <p class="muted" style="margin:6px 0 0">${sub} · dimensão principal ${P.nome}</p>
+      </div>
+      <div class="code" aria-label="Código ${ORDEM.map(k=>res[k].seg).join("")}">
+        ${ORDEM.map(k=>`<span style="color:${DIM[k].cor}">${res[k].seg}</span>`).join("")}
+      </div>
+    </div>
+
+    <h2>Intensidade por dimensão</h2>
+    <div class="chart" role="img" aria-label="Gráfico DISC">
+      <div class="axis">${[1,2,3,4,5,6,7].map(n=>`<span>${n}</span>`).join("")}</div>
+      ${ORDEM.map(k=>`<div class="col"><div class="mid"></div><div class="bar" data-h="${res[k].seg/7*100}" style="height:0;background:${DIM[k].cor}">${Math.round(res[k].seg/7*100)}%</div></div>`).join("")}
+    </div>
+    <div class="legend"><span></span>${ORDEM.map(k=>`<span>${k}<small>${DIM[k].nome}</small></span>`).join("")}</div>
+    <p class="muted" style="font-size:14px;margin-top:10px">A linha tracejada marca a média (nota 4). Acima dela, a dimensão é considerada alta.</p>
+
+    <h3>Sobre a sua dimensão principal: ${P.nome}</h3>
+    <p>${P.texto}</p>
+    <div class="grid2">
+      <div><h3>O que te motiva</h3><ul>${P.motiva.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      <div><h3>Pontos para desenvolver</h3><ul>${P.desenvolver.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    </div>
+
+    <h3>Como o cálculo chegou aqui</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Dimensão</th><th>Mais</th><th>Menos</th><th>Diferença</th><th>Nota (1–7)</th></tr></thead>
+      <tbody>${ORDEM.map(k=>`<tr><td>${k} — ${DIM[k].nome}</td><td>${res[k].mais}</td><td>${res[k].menos}</td><td>${res[k].dif>0?"+":""}${res[k].dif}</td><td><b>${res[k].seg}</b></td></tr>`).join("")}</tbody>
+    </table></div>
+
+    <p class="note">Protótipo para validação interna. Textos, nomes de perfil e faixas de nota são exemplos e devem ser revisados pelo RH antes do uso.</p>
+    <div class="row">
+      <button class="btn" id="again">Refazer o mapeamento</button>
+      <button class="btn ghost" id="demo2">Gerar outro exemplo aleatório</button>
+    </div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>app.querySelectorAll(".bar").forEach(b=>b.style.height=b.dataset.h+"%")));
+  document.getElementById("again").onclick=()=>{resp=Q.map(()=>({mais:null,menos:null}));atual=-1;render()};
+  document.getElementById("demo2").onclick=()=>{
+    resp=Q.map(()=>{const a=Math.floor(Math.random()*4);let b;do{b=Math.floor(Math.random()*4)}while(b===a);return{mais:a,menos:b}});
+    render();
+  };
+}
+
+render();
+</script>
+</body>
+</html>
